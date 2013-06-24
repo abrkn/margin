@@ -39,7 +39,9 @@ Margin.prototype.sync = function(depth, cb) {
         }
 
         _.each(this.options.margins, function(volume, margin) {
-            var bid = num(depth.bids[0].price).mul(1 - margin)
+            debug('volume %s margin %s', volume, margin)
+
+            var bid = num(depth.bids[0].price).mul(num(1).sub(margin))
             bid.set_precision(3)
 
             debug('best bid %j', depth.bids[0])
@@ -62,7 +64,9 @@ Margin.prototype.sync = function(depth, cb) {
         debug('best ask %j', depth.asks[0])
 
         _.each(this.options.margins, function(volume, margin) {
-            var ask = num(depth.asks[0].price).mul(1 + margin)
+            debug('volume %s margin %s', volume, margin)
+
+            var ask = num(depth.asks[0].price).mul(num(1).add(margin))
             ask.set_precision(3)
 
             desired.push({
