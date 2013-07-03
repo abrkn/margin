@@ -39,7 +39,7 @@ sudo npm install -g forever
 sudo rm -rf .npm tmp
 
 # Install margin
-npm install margin
+npm install margin@0.1.2
 
 cd node_modules/margin
 
