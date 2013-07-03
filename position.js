@@ -140,10 +140,13 @@ Position.prototype.setPosition = function(position, cb) {
     // Can be parallel, but would require more liquidity
     async.series([
         function(next) {
+            debug('performing cancellations (1/2)')
             if (!cancels.length) return next()
             that.cancelOrders(cancels, next)
         },
         function(next) {
+            debug('performing orders (2/2)')
+
             if (diff.eq(0)) return next()
 
             if (that.options.whatif) {

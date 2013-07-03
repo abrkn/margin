@@ -19,7 +19,7 @@ function endpointFromConfig(conf) {
     }
 
     if (conf.type == 'snow') {
-        return new hail.Snow(config.snow.key)
+        return new hail.Snow(config.snow.key, config.snow.endpoint)
     }
 
     if (conf.type == 'btce') {

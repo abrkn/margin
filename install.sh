@@ -49,8 +49,35 @@ tee config.json << EOL
     "positions": [
         {
             "pair": "BTCNOK",
-            "volume": 1,
-            "margin": 0.1,
+            "type": "ask",
+            "margins": {
+                "0.05": "1",
+                "0.075": "1.5",
+                "0.1": "1.75",
+                "0.125": "2",
+                "0.15": "3"
+            },
+            "from": {
+                "type": "fx",
+                "ref": "USD",
+                "inner": {
+                    "type": "bitcoincharts"
+                }
+            },
+            "to": {
+                "type": "snow"
+            }
+        },
+        {
+            "pair": "BTCNOK",
+            "type": "bid",
+            "margins": {
+                "0.05": "1",
+                "0.075": "1.5",
+                "0.1": "1.75",
+                "0.125": "2",
+                "0.15": "3"
+            },
             "from": {
                 "type": "fx",
                 "ref": "USD",
