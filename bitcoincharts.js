@@ -12,6 +12,7 @@ var bc = module.exports = function(options) {
 bc.prototype.expand = function(pair) {
     if (pair == 'BTCXRP') return 'rippleXRP'
     if (pair == 'BTCUSD') return 'bitstampUSD'
+    if (pair == 'BTCEUR') return 'btcdeEUR'
     throw new Error('Unsupported pair ' + pair + '')
 }
 
