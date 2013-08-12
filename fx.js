@@ -1,4 +1,5 @@
 var async = require('async')
+, format = require('util').format
 , num = require('num')
 , request = require('request')
 , debug = require('debug')('snow:fx')
@@ -9,8 +10,9 @@ var async = require('async')
 
 fx.prototype.depth = function(market, cb) {
     var that = this, rate, depth
-    , url = 'http://www.google.com/ig/calculator?hl=en&q=1' +
-        this.ref + '=?' + market.substr(3)
+    , url = format(
+        'http://www.xe.com/wap/2co/convert.cgi?Amount=1&From=%s&To=%s',
+        this.ref, market.substr(3))
 
     async.parallel({
         'rate': function(next) {
@@ -19,7 +21,7 @@ fx.prototype.depth = function(market, cb) {
                 json: true
             }, function(err, res, data) {
                 if (err) return next(err);
-                rate = num(data.match(/rhs\:\s*\"([\d\.]+)/)[1])
+                rate = num(data.match(/right.>([^ ]+)/)[1])
                 debug('exchange rate found at ' + rate.toString());
                 next();
             });
