@@ -1,7 +1,7 @@
 {
   "name": "margin",
   "description": "margin trader",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "scripts": {
     "test": "mocha"
   },
