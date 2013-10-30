@@ -13,7 +13,7 @@ var util = require('util')
     this.from = from
     this.to = to
     this.options = _.defaults(options, {
-        interval: 1000 * 60 * 5
+        interval: 1000 * 60 * 2
     })
 
     assert(~['bid', 'ask'].indexOf(this.type))
