@@ -5,7 +5,7 @@ var bc = module.exports = function(options) {
     this.options = options || {}
     _.defaults(this.options, {
         url: 'http://api.bitcoincharts.com/v1/markets.json',
-        cacheDuration: 15 * 60 * 60 * 1000
+        cacheDuration: 5 * 60 * 1000
     })
 }
 
@@ -51,10 +51,20 @@ bc.prototype.depth = function(pair, cb) {
     }, function(err, res, body) {
         if (err) return cb(err)
 
+        if (res.statusCode != 200) {
+            return cb(new Error('Status code ' + 200))
+        }
+
+        if (!body) {
+            return cb(new Error('Body is null'))
+        }
+
         that.cache = body.reduce(function(dict, market) {
             dict[market.symbol] = that.toDepth(market)
             return dict
         }, {})
+
+        this.cachedAt = +new Date()
 
         cb(null, that.cache[market])
     })
