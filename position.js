@@ -14,11 +14,17 @@ Position.prototype.groupOrders = function(orders) {
     var groups = []
 
     orders.forEach(function(order) {
+        debug('looking for a group in %s', groups.map(function(x) {
+            return x.type + ' @ ' + x.price.toString()
+        }).join('; '))
+
         var group = groups.filter(function(group) {
             return group.type == order.type && num(group.price).eq(order.price)
         })[0]
 
         if (!group) {
+            debug('no group found for %s @ %s', order.type, order.price.toString())
+
             group = {
                 price: order.price,
                 orders: [],
@@ -88,6 +94,8 @@ Position.prototype.merge = function(desired, actual) {
         })
     })
 
+    debug('after merged, theres %s group(s)', dps.length)
+
     return dps
 }
 
@@ -125,7 +133,7 @@ Position.prototype.setPosition = function(position, cb) {
         position.price,
         position.actual.volume,
         position.volume,
-        num(position.actual.volume).eq(position.volume) ? ' (no position)' : ''
+        num(position.actual.volume).eq(position.volume) ? ' (no change)' : ''
     )
 
     while (diff.lt(0)) {
@@ -140,8 +148,8 @@ Position.prototype.setPosition = function(position, cb) {
     // Can be parallel, but would require more liquidity
     async.series([
         function(next) {
-            debug('performing cancellations (1/2)')
             if (!cancels.length) return next()
+            debug('performing cancellations (1/2)')
             that.cancelOrders(cancels, next)
         },
         function(next) {
@@ -186,7 +194,7 @@ function createTable(market, actual, desired) {
 
     actual.forEach(function(a) {
         groups.push({
-            type: a.type.toUpperCase(),
+            type: a.type,
             price: a.price,
             actual: a,
             desired: null
@@ -195,29 +203,29 @@ function createTable(market, actual, desired) {
 
     desired.forEach(function(d) {
         var group = groups.filter(function(g) {
-            return g.price == d.price && g.type == d.type
+            return num(g.price).eq(d.price) && g.type == d.type
         })[0]
 
         if (!group) {
             group = {
-                type: d.type.toUpperCase(),
+                type: d.type,
                 price: d.price,
-                actual: null,
-                desired: d
+                actual: null
             }
             groups.push(group)
         }
+        group.desired = d
     })
 
     groups.sort(function(a, b) {
-        if (a.price != b.price) return a.price - b.price
+        if (!num(a.price).eq(b.price)) return a.price - b.price
         return a.type - b.type
     })
 
     groups.forEach(function(g) {
         table.push([
             market,
-            g.type,
+            g.type.toUpperCase(),
             g.price,
             g.desired ? g.desired.volume : 0,
             g.actual ? g.actual.volume : 0,
