@@ -44,16 +44,20 @@ fx.prototype.depth = function(market, cb) {
         var outputs = { asks: [], bids: [] };
 
         if (bid) {
+            debug('best bid is %s @ %s', bid.volume, bid.price)
+
             outputs.bids.push({
                 price: num(bid.price).mul(rate).toString(),
-                volume: num(bid.volume).mul(rate).toString()
+                volume: num(bid.volum || 0).mul(rate).toString()
             });
         }
 
         if (ask) {
+            debug('best ask is %s @ %s', ask.volume, ask.price)
+
             outputs.asks.push({
                 price: num(ask.price).mul(rate).toString(),
-                volume: num(ask.volume).mul(rate).toString()
+                volume: num(ask.volume || 0).mul(rate).toString()
             });
         }
 
