@@ -87,13 +87,22 @@ function cancelAll(ep, cb) {
     })
 }
 
-var margins = config.positions.map(function(pos) {
-    pos.whatif = argv.w
-    var from = endpointFromConfig(pos.from)
-    , to = endpointFromConfig(pos.to)
-    , margin = new Margin(pos.pair, pos.type, from, to, pos)
-    margin.on('error',  errorHandler)
-    return margin
+var margins
+
+cancelAll(endpointFromConfig({ type: 'snow' }), function(err) {
+    if (err) {
+        console.error('failed to cancel all on startup')
+        console.error(err.message)
+    }
+
+    margins = config.positions.map(function(pos) {
+        pos.whatif = argv.w
+        var from = endpointFromConfig(pos.from)
+        , to = endpointFromConfig(pos.to)
+        , margin = new Margin(pos.pair, pos.type, from, to, pos)
+        margin.on('error',  errorHandler)
+        return margin
+    })
 })
 
 process.on('uncaughtException', function(err) {

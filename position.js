@@ -94,9 +94,11 @@ Position.prototype.merge = function(desired, actual) {
         })
     })
 
-    debug('after merged, theres %s group(s)', dps.length)
-
-    return dps
+    return dps.sort(function(a, b) {
+        return this.type == 'ask' ?
+            a.price - b.price :
+            b.price - a.price
+    }.bind(this))
 }
 
 Position.prototype.cancelOrders = function(orders, cb) {
