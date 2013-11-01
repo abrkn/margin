@@ -1,5 +1,6 @@
 var _ = require('lodash')
 , request = require('request')
+, num = require('num')
 
 var bc = module.exports = function(options) {
     this.options = options || {}
@@ -32,8 +33,8 @@ bc.prototype.expand = function(pair) {
 */
 bc.prototype.toDepth = function(market) {
     return {
-        bids: market.bid ? [{ price: market.bid.toString(), volume: null }] : [],
-        asks: market.ask ? [{ price: market.ask.toString(), volume: null }] : []
+        bids: market.bid ? [{ price: num(market.bid).toString(), volume: null }] : [],
+        asks: market.ask ? [{ price: num(market.ask).toString(), volume: null }] : []
     }
 }
 
