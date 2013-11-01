@@ -48,7 +48,7 @@ fx.prototype.depth = function(market, cb) {
 
             outputs.bids.push({
                 price: num(bid.price).mul(rate).toString(),
-                volume: num(bid.volum || 0).mul(rate).toString()
+                volume: num(bid.volume || 0).mul(rate).toString()
             });
         }
 
